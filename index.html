@@ -70,9 +70,9 @@
       <div class="container">
         <h2 id="abstract-title">Abstract</h2>
         <div class="prose">
-          <p>Robot in-context learning lets a policy perform an unseen task by following a demonstration without task-specific fine-tuning. Any2Act extends this approach to demonstrations from teleoperation, human video, simulation, handheld UMI grippers, and other robots. It expresses each demonstration in the camera layout and action space of the robot that will execute it, giving the policy a shared representation across sources.</p>
-          <p>Any2Act learns to follow from robot-to-robot pairs drawn from <strong>1.2 million real trajectories</strong> across <strong>10,000 tasks</strong>. Source-routed adapters train on a few hundred task-aligned pairs per source while the pretrained model stays frozen. During long-horizon tasks, a training-free tracker selects a short window around the robot’s current progress and can return to an earlier step after a failure.</p>
-          <p>With a single demonstration, Any2Act achieves <strong>57.5% success on unseen tasks</strong> in the real-world Task Generalization benchmark without task-specific fine-tuning, exceeding the evaluated vision-language-action models fine-tuned on 50 demonstrations per task. Heterogeneous demonstration sources retain <strong>74–91%</strong> of the success achieved with demonstrations from the executor robot.</p>
+          <p>Robot in-context learning (ICL) enables a policy to perform unseen tasks by following contextual demonstrations without task-specific fine-tuning. This capability is valuable because large language models that reason at low frequency can specify tasks through demonstrations and delegate high-frequency execution to the policy. However, existing methods conditioned on human videos are limited by the availability of paired human–robot data, and methods conditioned on robot demonstrations accept only one or two source types at limited scale.</p>
+          <p>We present Any2Act, a foundation model for robot ICL built around a unified embodiment-grounded representation that expresses demonstrations in the camera layout and action space of the executor robot. This representation decouples learning to follow demonstrations from admitting a new demonstration source. Any2Act learns to follow once using robot-to-robot pairs formed from <strong>1.2M real trajectories</strong> spanning <strong>10K tasks</strong>. Demonstrations from human videos, simulation, UMI, and other robots are translated into this representation, and source-routed adapters trained on a few hundred pairs each absorb the residual gap while the pretrained model stays frozen.</p>
+          <p>For long-horizon tasks, a training-free tracker feeds only the demonstration window around the executor’s current progress, bounding the context and rolling back to redo failed steps. From a single demonstration, Any2Act achieves <strong>57.5% success</strong> on unseen tasks in the real-world Task Generalization benchmark without task-specific fine-tuning, exceeding evaluated VLA baselines fine-tuned on 50 demonstrations per task. Heterogeneous demonstration sources retain <strong>74–91%</strong> of the success achieved with the executor’s own demonstrations.</p>
         </div>
       </div>
     </section>
@@ -80,26 +80,26 @@
       <div class="container">
         <header class="section-header">
           <h2 id="method-title">Method</h2>
-          <p>Any2Act uses the robot’s current observations and a short demonstration window to predict a future frame and the next action chunk.</p>
+          <p>Any2Act decouples learning to follow demonstrations from admitting new demonstration sources by mapping heterogeneous inputs into the executor robot’s representation.</p>
         </header>
         <figure class="paper-figure">
           <a href="paper-overview.png?v=2" target="_blank" rel="noopener" aria-label="Open the Any2Act overview figure at full size" title="View full size">
             <img src="paper-overview.png?v=2" alt="Five demonstration sources feed Any2Act through a shared representation for real-world generalization." width="2740" height="1121" loading="lazy">
           </a>
-          <figcaption><strong>Framework overview.</strong> Teleoperation, simulation, UMI, human video, and other robots share the executor’s representation for in-context following.</figcaption>
+          <figcaption><strong>Framework overview.</strong> Any2Act translates demonstrations from teleoperation, simulation, UMI, human video, and other robots into the executor’s camera layout and action space.</figcaption>
         </figure>
         <div class="method-components">
           <div>
             <h3>Embodiment-grounded representation</h3>
-            <p>Demonstrations are expressed in the executor’s camera layout and action space so the policy can interpret them in the context of its own observations.</p>
+            <p>Demonstrations from teleoperation, simulation, UMI, human video, and other robots are translated into the camera layout and action space of the executor.</p>
           </div>
           <div>
             <h3>Source-routed adapters</h3>
-            <p>Each adapter acts on demonstration tokens from one source, adapting those inputs while keeping the pretrained model frozen.</p>
+            <p>Source-routed adapters trained on a few hundred pairs per source process only the demonstration tokens from their corresponding source to absorb the residual domain gap while keeping the pretrained model frozen.</p>
           </div>
           <div>
             <h3>Progress tracking and recovery</h3>
-            <p>The tracker advances the demonstration window with the rollout. When execution fails, the window can move back to the relevant step.</p>
+            <p>At inference, a training-free progress tracker supplies a short demonstration window around the executor’s current progress and rolls the window back to retry failed steps on long-horizon tasks.</p>
           </div>
         </div>
         <details class="method">
@@ -108,7 +108,7 @@
             <a href="paper-method.png?v=2" target="_blank" rel="noopener" aria-label="Open the Any2Act architecture figure at full size" title="View full size">
               <img src="paper-method.png?v=2" alt="The Any2Act video model and action expert use a tracked demonstration window and source-routed adapters." width="2746" height="1387" loading="lazy">
             </a>
-            <figcaption><strong>Model architecture.</strong> The video model predicts a future frame. The action expert reads its features to predict a two-second action chunk.</figcaption>
+            <figcaption><strong>Model architecture.</strong> A video model takes the tracked demonstration window and current observation to predict a future frame, and an action expert cross-attends to the video model’s layers to predict a two-second action chunk. Source-routed adapters act only on demonstration tokens from their associated source while the pretrained backbone remains frozen.</figcaption>
           </figure>
         </details>
       </div>
