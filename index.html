@@ -11,7 +11,7 @@
   <title>Any2Act | Scaling In-Context Robot Learning</title>
   <link rel="icon" href="mark.svg" type="image/svg+xml">
   <link rel="preload" as="image" href="film-cover.webp">
-  <link rel="stylesheet" href="site.css">
+  <link rel="stylesheet" href="site.css?v=2">
   <script src="site.js" defer></script>
 </head>
 <body>
@@ -21,9 +21,28 @@
       <div class="hero-copy">
         <img class="project-logo" src="any2act-logo.png" alt="" width="636" height="177">
         <h1 id="project-title"><span class="visually-hidden">Any2Act: </span>Scaling In-Context Robot Learning<br class="desktop-break"> from Heterogeneous Demonstrations</h1>
-        <p class="hero-summary">Learn a new robot task from a single demonstration.</p>
+        <ul class="authors" aria-label="Authors" role="list">
+          <li>Ziang Ren<sup aria-label="equal contribution">*</sup></li>
+          <li>Zifan Wang<sup aria-label="equal contribution">*</sup></li>
+          <li>Zhuoyang Li<sup aria-label="equal contribution">*</sup></li>
+          <li>Benhao Qin</li>
+          <li>Haoyang Li</li>
+          <li>Qingtao Liu</li>
+          <li>Xuchuan Chen</li>
+          <li>Zekun Qi</li>
+          <li>He Wang</li>
+          <li>Yanchao Yang</li>
+          <li>Li Yi</li>
+        </ul>
+        <p class="author-note">* Equal contribution</p>
+        <ul class="resources" aria-label="Research resources" role="list">
+          <li><strong>arXiv</strong><span>Coming soon</span></li>
+          <li><strong>Code</strong><span>Coming soon</span></li>
+          <li><strong>Model</strong><span>Coming soon</span></li>
+        </ul>
         <nav class="project-nav" aria-label="Project sections">
           <a href="#film">Video</a>
+          <a href="#abstract">Abstract</a>
           <a href="#research">Method</a>
           <a href="#cross">Heterogeneous Demonstrations</a>
           <a href="#demos">Real-World Demos</a>
@@ -32,8 +51,8 @@
       <figure id="film" class="hero-film">
         <div class="player player-featured">
             <video preload="none" playsinline controls poster="film-cover.webp" aria-label="Any2Act project video">
-              <source src="any2act-film.mp4" type="video/mp4">
-              <a href="any2act-film.mp4">Download video</a>
+              <source src="any2act-film.mp4?v=2" type="video/mp4">
+              <a href="any2act-film.mp4?v=2">Download video</a>
             </video>
             <button class="play" type="button" aria-label="Play Any2Act project video">
               <span class="play-icon" aria-hidden="true"></span>
@@ -47,30 +66,49 @@
         <div><dt>57.5%</dt><dd>success on unseen tasks in the real-world evaluation</dd></div>
       </dl>
     </section>
-    <section id="research" class="section research">
+    <section id="abstract" class="section abstract" aria-labelledby="abstract-title">
       <div class="container">
-        <div class="research-intro">
+        <h2 id="abstract-title">Abstract</h2>
+        <div class="prose">
+          <p>Robot in-context learning lets a policy perform an unseen task by following a demonstration without task-specific fine-tuning. Any2Act extends this approach to demonstrations from teleoperation, human video, simulation, handheld UMI grippers, and other robots. It expresses each demonstration in the camera layout and action space of the robot that will execute it, giving the policy a shared representation across sources.</p>
+          <p>Any2Act learns to follow from robot-to-robot pairs drawn from <strong>1.2 million real trajectories</strong> across <strong>10,000 tasks</strong>. Source-routed adapters train on a few hundred task-aligned pairs per source while the pretrained model stays frozen. During long-horizon tasks, a training-free tracker selects a short window around the robot’s current progress and can return to an earlier step after a failure.</p>
+          <p>With a single demonstration, Any2Act achieves <strong>57.5% success on unseen tasks</strong> in the real-world Task Generalization benchmark without task-specific fine-tuning, exceeding the evaluated vision-language-action models fine-tuned on 50 demonstrations per task. Heterogeneous demonstration sources retain <strong>74–91%</strong> of the success achieved with demonstrations from the executor robot.</p>
+        </div>
+      </div>
+    </section>
+    <section id="research" class="section research" aria-labelledby="method-title">
+      <div class="container">
+        <header class="section-header">
+          <h2 id="method-title">Method</h2>
+          <p>Any2Act uses the robot’s current observations and a short demonstration window to predict a future frame and the next action chunk.</p>
+        </header>
+        <figure class="paper-figure">
+          <a href="paper-overview.png?v=2" target="_blank" rel="noopener" aria-label="Open the Any2Act overview figure at full size" title="View full size">
+            <img src="paper-overview.png?v=2" alt="Five demonstration sources feed Any2Act through a shared representation for real-world generalization." width="2740" height="1121" loading="lazy">
+          </a>
+          <figcaption><strong>Framework overview.</strong> Teleoperation, simulation, UMI, human video, and other robots share the executor’s representation for in-context following.</figcaption>
+        </figure>
+        <div class="method-components">
           <div>
-            <h2>Method</h2>
+            <h3>Embodiment-grounded representation</h3>
+            <p>Demonstrations are expressed in the executor’s camera layout and action space so the policy can interpret them in the context of its own observations.</p>
           </div>
-          <div class="prose">
-            <p>Any2Act expresses demonstrations in the camera views and action space of the robot that will execute them. It learns demonstration following from paired real-robot trajectories, then adapts to new sources with a few hundred task-aligned pairs per source.</p>
-            <p>During execution, a progress tracker keeps a short window of the demonstration in context. It can revisit an earlier step when the robot needs to retry.</p>
+          <div>
+            <h3>Source-routed adapters</h3>
+            <p>Each adapter acts on demonstration tokens from one source, adapting those inputs while keeping the pretrained model frozen.</p>
+          </div>
+          <div>
+            <h3>Progress tracking and recovery</h3>
+            <p>The tracker advances the demonstration window with the rollout. When execution fails, the window can move back to the relevant step.</p>
           </div>
         </div>
-        <figure class="paper-figure">
-          <a href="paper-overview.png" target="_blank" rel="noopener" aria-label="Open the Any2Act overview figure at full size">
-            <img src="paper-overview.png" alt="Five demonstration sources feed Any2Act through a shared representation for real-world generalization." width="1717" height="705" loading="lazy">
-          </a>
-          <figcaption>Demonstrations from five sources share the executor’s representation.</figcaption>
-        </figure>
         <details class="method">
-          <summary>Model architecture and progress tracking</summary>
+          <summary>Model architecture</summary>
           <figure class="paper-figure">
-            <a href="paper-method.png" target="_blank" rel="noopener" aria-label="Open the Any2Act architecture figure at full size">
-              <img src="paper-method.png" alt="The Any2Act video model and action expert use a tracked demonstration window and source-routed adapters." width="1660" height="839" loading="lazy">
+            <a href="paper-method.png?v=2" target="_blank" rel="noopener" aria-label="Open the Any2Act architecture figure at full size" title="View full size">
+              <img src="paper-method.png?v=2" alt="The Any2Act video model and action expert use a tracked demonstration window and source-routed adapters." width="2746" height="1387" loading="lazy">
             </a>
-            <figcaption>The video model predicts a future frame and the action expert predicts a two-second action chunk.</figcaption>
+            <figcaption><strong>Model architecture.</strong> The video model predicts a future frame. The action expert reads its features to predict a two-second action chunk.</figcaption>
           </figure>
         </details>
       </div>
@@ -85,8 +123,8 @@
           <article class="clip">
             <div class="player">
               <video preload="none" playsinline controls poster="cross-bowl.webp" aria-label="Put fruit and a bowl in a pot">
-                <source src="cross-bowl.mp4" type="video/mp4">
-                <a href="cross-bowl.mp4">Download video</a>
+                <source src="cross-bowl.mp4?v=2" type="video/mp4">
+                <a href="cross-bowl.mp4?v=2">Download video</a>
               </video>
               <button class="play" type="button" aria-label="Play Put fruit and a bowl in a pot">
                 <span class="play-icon" aria-hidden="true"></span>
@@ -101,8 +139,8 @@
           <article class="clip">
             <div class="player">
               <video preload="none" playsinline controls poster="cross-keyboard.webp" aria-label="Brush a keyboard">
-                <source src="cross-keyboard.mp4" type="video/mp4">
-                <a href="cross-keyboard.mp4">Download video</a>
+                <source src="cross-keyboard.mp4?v=2" type="video/mp4">
+                <a href="cross-keyboard.mp4?v=2">Download video</a>
               </video>
               <button class="play" type="button" aria-label="Play Brush a keyboard">
                 <span class="play-icon" aria-hidden="true"></span>
@@ -117,8 +155,8 @@
           <article class="clip">
             <div class="player">
               <video preload="none" playsinline controls poster="cross-eggs.webp" aria-label="Prepare eggs in a pot">
-                <source src="cross-eggs.mp4" type="video/mp4">
-                <a href="cross-eggs.mp4">Download video</a>
+                <source src="cross-eggs.mp4?v=2" type="video/mp4">
+                <a href="cross-eggs.mp4?v=2">Download video</a>
               </video>
               <button class="play" type="button" aria-label="Play Prepare eggs in a pot">
                 <span class="play-icon" aria-hidden="true"></span>
@@ -133,8 +171,8 @@
           <article class="clip">
             <div class="player">
               <video preload="none" playsinline controls poster="cross-laptop.webp" aria-label="Stow a tape measure and close a laptop">
-                <source src="cross-laptop.mp4" type="video/mp4">
-                <a href="cross-laptop.mp4">Download video</a>
+                <source src="cross-laptop.mp4?v=2" type="video/mp4">
+                <a href="cross-laptop.mp4?v=2">Download video</a>
               </video>
               <button class="play" type="button" aria-label="Play Stow a tape measure and close a laptop">
                 <span class="play-icon" aria-hidden="true"></span>
@@ -149,8 +187,8 @@
           <article class="clip">
             <div class="player">
               <video preload="none" playsinline controls poster="cross-umbrella.webp" aria-label="Place a folded umbrella in a basket">
-                <source src="cross-umbrella.mp4" type="video/mp4">
-                <a href="cross-umbrella.mp4">Download video</a>
+                <source src="cross-umbrella.mp4?v=2" type="video/mp4">
+                <a href="cross-umbrella.mp4?v=2">Download video</a>
               </video>
               <button class="play" type="button" aria-label="Play Place a folded umbrella in a basket">
                 <span class="play-icon" aria-hidden="true"></span>
@@ -165,8 +203,8 @@
           <article class="clip">
             <div class="player">
               <video preload="none" playsinline controls poster="cross-paper.webp" aria-label="Place a paper ball in a container">
-                <source src="cross-paper.mp4" type="video/mp4">
-                <a href="cross-paper.mp4">Download video</a>
+                <source src="cross-paper.mp4?v=2" type="video/mp4">
+                <a href="cross-paper.mp4?v=2">Download video</a>
               </video>
               <button class="play" type="button" aria-label="Play Place a paper ball in a container">
                 <span class="play-icon" aria-hidden="true"></span>
@@ -191,8 +229,8 @@
           <article class="clip">
             <div class="player">
               <video preload="none" playsinline controls poster="demo-pointer.webp" aria-label="Extend a telescopic pointer">
-                <source src="demo-pointer.mp4" type="video/mp4">
-                <a href="demo-pointer.mp4">Download video</a>
+                <source src="demo-pointer.mp4?v=2" type="video/mp4">
+                <a href="demo-pointer.mp4?v=2">Download video</a>
               </video>
               <button class="play" type="button" aria-label="Play Extend a telescopic pointer">
                 <span class="play-icon" aria-hidden="true"></span>
@@ -206,8 +244,8 @@
           <article class="clip">
             <div class="player">
               <video preload="none" playsinline controls poster="demo-cloth.webp" aria-label="Fold a cloth diagonally">
-                <source src="demo-cloth.mp4" type="video/mp4">
-                <a href="demo-cloth.mp4">Download video</a>
+                <source src="demo-cloth.mp4?v=2" type="video/mp4">
+                <a href="demo-cloth.mp4?v=2">Download video</a>
               </video>
               <button class="play" type="button" aria-label="Play Fold a cloth diagonally">
                 <span class="play-icon" aria-hidden="true"></span>
@@ -221,8 +259,8 @@
           <article class="clip">
             <div class="player">
               <video preload="none" playsinline controls poster="demo-cart.webp" aria-label="Load and push a shopping cart">
-                <source src="demo-cart.mp4" type="video/mp4">
-                <a href="demo-cart.mp4">Download video</a>
+                <source src="demo-cart.mp4?v=2" type="video/mp4">
+                <a href="demo-cart.mp4?v=2">Download video</a>
               </video>
               <button class="play" type="button" aria-label="Play Load and push a shopping cart">
                 <span class="play-icon" aria-hidden="true"></span>
@@ -236,8 +274,8 @@
           <article class="clip">
             <div class="player">
               <video preload="none" playsinline controls poster="demo-flower.webp" aria-label="Hand off a flower and place it in a vase">
-                <source src="demo-flower.mp4" type="video/mp4">
-                <a href="demo-flower.mp4">Download video</a>
+                <source src="demo-flower.mp4?v=2" type="video/mp4">
+                <a href="demo-flower.mp4?v=2">Download video</a>
               </video>
               <button class="play" type="button" aria-label="Play Hand off a flower and place it in a vase">
                 <span class="play-icon" aria-hidden="true"></span>
@@ -251,8 +289,8 @@
           <article class="clip">
             <div class="player">
               <video preload="none" playsinline controls poster="demo-mug.webp" aria-label="Hang a mug by its handle">
-                <source src="demo-mug.mp4" type="video/mp4">
-                <a href="demo-mug.mp4">Download video</a>
+                <source src="demo-mug.mp4?v=2" type="video/mp4">
+                <a href="demo-mug.mp4?v=2">Download video</a>
               </video>
               <button class="play" type="button" aria-label="Play Hang a mug by its handle">
                 <span class="play-icon" aria-hidden="true"></span>
@@ -266,8 +304,8 @@
           <article class="clip">
             <div class="player">
               <video preload="none" playsinline controls poster="demo-pour.webp" aria-label="Pour water into a mug">
-                <source src="demo-pour.mp4" type="video/mp4">
-                <a href="demo-pour.mp4">Download video</a>
+                <source src="demo-pour.mp4?v=2" type="video/mp4">
+                <a href="demo-pour.mp4?v=2">Download video</a>
               </video>
               <button class="play" type="button" aria-label="Play Pour water into a mug">
                 <span class="play-icon" aria-hidden="true"></span>
@@ -281,8 +319,8 @@
           <article class="clip">
             <div class="player">
               <video preload="none" playsinline controls poster="demo-books.webp" aria-label="Transfer two books to a storage box">
-                <source src="demo-books.mp4" type="video/mp4">
-                <a href="demo-books.mp4">Download video</a>
+                <source src="demo-books.mp4?v=2" type="video/mp4">
+                <a href="demo-books.mp4?v=2">Download video</a>
               </video>
               <button class="play" type="button" aria-label="Play Transfer two books to a storage box">
                 <span class="play-icon" aria-hidden="true"></span>
@@ -296,8 +334,8 @@
           <article class="clip">
             <div class="player">
               <video preload="none" playsinline controls poster="demo-corn.webp" aria-label="Open a pot, add corn, and replace the lid">
-                <source src="demo-corn.mp4" type="video/mp4">
-                <a href="demo-corn.mp4">Download video</a>
+                <source src="demo-corn.mp4?v=2" type="video/mp4">
+                <a href="demo-corn.mp4?v=2">Download video</a>
               </video>
               <button class="play" type="button" aria-label="Play Open a pot, add corn, and replace the lid">
                 <span class="play-icon" aria-hidden="true"></span>
@@ -311,8 +349,8 @@
           <article class="clip">
             <div class="player">
               <video preload="none" playsinline controls poster="demo-tray.webp" aria-label="Place a tape measure and a small object in a tray">
-                <source src="demo-tray.mp4" type="video/mp4">
-                <a href="demo-tray.mp4">Download video</a>
+                <source src="demo-tray.mp4?v=2" type="video/mp4">
+                <a href="demo-tray.mp4?v=2">Download video</a>
               </video>
               <button class="play" type="button" aria-label="Play Place a tape measure and a small object in a tray">
                 <span class="play-icon" aria-hidden="true"></span>
@@ -326,8 +364,8 @@
           <article class="clip">
             <div class="player">
               <video preload="none" playsinline controls poster="demo-weigh.webp" aria-label="Place a cup on a digital scale">
-                <source src="demo-weigh.mp4" type="video/mp4">
-                <a href="demo-weigh.mp4">Download video</a>
+                <source src="demo-weigh.mp4?v=2" type="video/mp4">
+                <a href="demo-weigh.mp4?v=2">Download video</a>
               </video>
               <button class="play" type="button" aria-label="Play Place a cup on a digital scale">
                 <span class="play-icon" aria-hidden="true"></span>
