@@ -409,7 +409,8 @@ video:focus-visible {
 }
 
 .paper-figure {
-  margin: 25px 0 0;
+  max-width: 1000px;
+  margin: 25px auto 0;
   padding: clamp(12px, 3vw, 28px);
   border: 1px solid var(--line);
   border-radius: 7px;
@@ -486,7 +487,7 @@ video:focus-visible {
 }
 
 .method .paper-figure {
-  margin: 2px 0 18px;
+  margin: 2px auto 18px;
 }
 
 /* Video galleries */

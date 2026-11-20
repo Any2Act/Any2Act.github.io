@@ -23,3 +23,19 @@ for (const player of players) {
 }
 
 document.documentElement.classList.add("js");
+
+if (
+  location.origin === "https://any2act.github.io" &&
+  navigator.doNotTrack !== "1" &&
+  !navigator.globalPrivacyControl
+) {
+  window.addEventListener("load", () => {
+    fetch("https://hits.sh/any2act.github.io.svg", {
+      mode: "no-cors",
+      credentials: "omit",
+      cache: "no-store",
+      referrerPolicy: "no-referrer",
+      keepalive: true,
+    }).catch(() => {});
+  }, { once: true });
+}
