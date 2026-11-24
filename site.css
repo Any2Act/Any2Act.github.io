@@ -140,7 +140,7 @@ video:focus-visible {
 }
 
 .project-logo {
-  width: 178px;
+  width: clamp(204px, 22vw, 272px);
   height: auto;
   margin: 0 auto;
 }
@@ -149,7 +149,7 @@ video:focus-visible {
   max-width: 1020px;
   margin: 18px auto 0;
   color: #182136;
-  font-size: clamp(1.75rem, 7.3vw, 3.2rem);
+  font-size: clamp(1.6rem, 6.6vw, 2.65rem);
   font-weight: 650;
   line-height: 1.14;
   letter-spacing: -0.025em;
@@ -222,22 +222,54 @@ video:focus-visible {
   font-size: 13px;
 }
 
+.institution-logos {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr) minmax(0, 1.1fr) minmax(0, 1.05fr);
+  align-items: center;
+  width: min(100%, 800px);
+  gap: clamp(8px, 3vw, 32px);
+  margin: 19px auto 0;
+  padding: 0;
+  list-style: none;
+}
+
+.institution-logos img {
+  display: block;
+  width: 100%;
+  height: clamp(26px, 5vw, 48px);
+  object-fit: contain;
+}
+
 .resources {
-  margin: 16px auto 0;
+  margin: 20px auto 0;
   gap: 8px;
 }
 
 .resources li {
   display: grid;
-  justify-items: center;
-  min-width: 86px;
-  padding: 5px 10px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  background: var(--paper-cool);
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  column-gap: 8px;
+  padding: 7px clamp(9px, 2vw, 16px);
+  border: 1px solid #dce1ee;
+  border-radius: 999px;
+  background: #f7f8fc;
   color: var(--muted);
-  font-size: 12px;
-  line-height: 1.4;
+  font-size: 11px;
+  line-height: 1.35;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.resources svg {
+  grid-row: span 2;
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: var(--accent-dark);
+  stroke-width: 1.65;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .resources strong {
@@ -644,10 +676,6 @@ video:focus-visible {
     padding-top: 42px;
   }
 
-  .project-logo {
-    width: 194px;
-  }
-
   .project-nav {
     gap-inline: 28px;
   }
@@ -742,13 +770,9 @@ video:focus-visible {
     padding: 44px 0 42px;
   }
 
-  .project-logo {
-    width: 202px;
-  }
-
   .hero h1 {
     margin-top: 18px;
-    font-size: clamp(2.75rem, 4.5vw, 3.15rem);
+    font-size: clamp(2.2rem, 3.45vw, 2.65rem);
     line-height: 1.12;
   }
 
@@ -783,16 +807,18 @@ video:focus-visible {
 }
 
 @media (max-width: 359px) {
-  .hero h1 {
-    font-size: 1.9rem;
-  }
-
   .project-nav {
     gap-inline: 16px;
   }
 
-  .project-logo {
-    width: 164px;
+  .resources li {
+    column-gap: 5px;
+    padding-inline: 7px;
+  }
+
+  .resources svg {
+    width: 13px;
+    height: 13px;
   }
 }
 
