@@ -162,6 +162,7 @@ video:focus-visible {
 }
 
 .authors,
+.affiliations,
 .resources {
   display: flex;
   flex-wrap: wrap;
@@ -171,26 +172,52 @@ video:focus-visible {
 }
 
 .authors {
-  max-width: 744px;
+  max-width: 780px;
   margin: 19px auto 0;
   gap: 4px clamp(12px, 2vw, 22px);
   font-weight: 550;
   line-height: 1.5;
 }
 
-.authors li {
+.authors li,
+.affiliations li,
+.author-note span {
   white-space: nowrap;
 }
 
-.authors sup {
-  margin-left: 2px;
+.authors sup,
+.affiliations sup,
+.author-note sup {
   color: var(--accent-dark);
-  font-size: .67em;
+  font-size: .72em;
+  font-weight: 600;
   line-height: 0;
 }
 
+.authors sup {
+  margin-inline-start: 2px;
+}
+
+.affiliations sup,
+.author-note sup {
+  margin-inline-end: 3px;
+}
+
+.affiliations {
+  max-width: 940px;
+  margin: 11px auto 0;
+  gap: 2px 16px;
+  color: var(--muted);
+  font-size: .875rem;
+  line-height: 1.5;
+}
+
 .author-note {
-  margin-top: 6px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2px 14px;
+  margin-top: 5px;
   color: var(--muted);
   font-size: 13px;
 }
