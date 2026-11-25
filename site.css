@@ -246,7 +246,7 @@ video:focus-visible {
   gap: 8px;
 }
 
-.resources li {
+.resource {
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
@@ -260,6 +260,18 @@ video:focus-visible {
   line-height: 1.35;
   text-align: left;
   white-space: nowrap;
+}
+
+a.resource {
+  border-color: #cbd2e7;
+  background: var(--paper-cool);
+  color: var(--accent-dark);
+  text-decoration: none;
+}
+
+a.resource:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
 }
 
 .resources svg {
@@ -811,7 +823,7 @@ video:focus-visible {
     gap-inline: 16px;
   }
 
-  .resources li {
+  .resource {
     column-gap: 5px;
     padding-inline: 7px;
   }
